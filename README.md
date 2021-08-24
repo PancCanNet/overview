@@ -8,6 +8,9 @@ The aim of this project is the creation of a biological pathway community portal
 
 The [PancCanNet pathway portal](https://www.wikipathways.org/index.php/Portal:PancCanNet) is maintained on the community curated pathway database [WikiPathways](https://www.wikipathways.org/) and currently contains xx pathways. 
 
+* Portal: https://www.wikipathways.org/index.php/Portal:PancCanNet
+* License: CC0
+
 If you are interested in joining our intiative and contribute to the pathway collection or request pathways to be added, please do not hesistate to contact us!
 
 ---
