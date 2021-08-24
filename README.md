@@ -6,10 +6,16 @@ The aim of this project is the creation of a biological pathway community portal
 
 ### Pathway collection
 
-The [PancCanNet pathway portal](https://www.wikipathways.org/index.php/Portal:PancCanNet) is maintained on the community curated pathway database [WikiPathways](https://www.wikipathways.org/) and currently contains xx pathways. 
+The [PancCanNet pathway portal](https://www.wikipathways.org/index.php/Portal:PancCanNet) is maintained on the community curated pathway database [WikiPathways](https://www.wikipathways.org/). 
 
 * **Portal**: [https://www.wikipathways.org/index.php/Portal:PancCanNet](https://www.wikipathways.org/index.php/Portal:PancCanNet)
+* **Pathways**: xx pathways from xx contributors
 * **License**: CC0
+* **Availability**:
+  * GPML files: http://www.wikipathways.org//wpi/batchDownload.php?species=Homo%20sapiens&fileType=gpml&tag=Curation:PancCanNet
+  * RDF: xxx
+  * GMT: xxx
+  * Curation reports: xxx
 
 If you are interested in joining our intiative and contribute to the pathway collection or request pathways to be added, please do not hesistate to contact us!
 
