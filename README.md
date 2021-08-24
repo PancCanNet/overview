@@ -29,4 +29,3 @@ If you are interested in joining our intiative and contribute to the pathway col
 ### Team
 
 The PancCanNet project is a collaboration between Erasmus MC Rotterdam, Maastricht University and Omnigen.
-
