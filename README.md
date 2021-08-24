@@ -16,6 +16,7 @@ The [PancCanNet pathway portal](https://www.wikipathways.org/index.php/Portal:Pa
   * RDF: xxx
   * GMT: xxx
   * Curation reports: xxx
+  * Pathway-gene network: xxx
 
 If you are interested in joining our intiative and contribute to the pathway collection or request pathways to be added, please do not hesistate to contact us!
 
