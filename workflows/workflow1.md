@@ -187,17 +187,18 @@ rm(runningRemote,graph,table,notebookIsRunning)
 **Output**
 
 _Hub nodes:_
-    ##                   Gene GeneName NumPathways
-    ## 560958 ENSG00000142208     AKT1          16
-    ## 559948 ENSG00000100030    MAPK1          15
-    ## 559848 ENSG00000169032   MAP2K1          13
-    ## 561098 ENSG00000109320    NFKB1          13
-    ## 559703 ENSG00000136238     RAC1          12
-    ## 559938 ENSG00000102882    MAPK3          12
-    ## 560948 ENSG00000145675   PIK3R1          12
-    ## 559238 ENSG00000174775     HRAS          11
-    ## 559443 ENSG00000132155     RAF1          11
-    ## 559933 ENSG00000105647   PIK3R2          11
+| Gene | Gene name | # Pathways | 
+|:----:|------|-------|
+| ENSG00000142208 | AKT1 | 16 | 
+| ENSG00000100030 | MAPK1 | 15 | 
+| ENSG00000169032 | MAP2K1 | 13 | 
+| ENSG00000109320 | NFKB1 | 13 | 
+| ENSG00000136238 | RAC1 | 12 | 
+| ENSG00000102882 | MAPK3 | 12 | 
+| ENSG00000145675 | PIK3R1 | 12 | 
+| ENSG00000174775 | HRAS | 11 | 
+| ENSG00000132155 | RAF1 | 11 | 
+| ENSG00000105647 | PIK3R2 | 11 | 
     
 <img src="fig/workflow1-fig3.png" alt="fig1" width="300"/>
 
