@@ -1,5 +1,7 @@
 # Workflow 1: Exploration PancCanNet pathway collection
 
+Download .Rmd file for the workflow here. 
+
 ## Introduction
 
 In this workflow, you will explore the PancCanNet pathway resource in
