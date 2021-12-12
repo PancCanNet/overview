@@ -42,4 +42,4 @@ The PancCanNet project is a collaboration between Erasmus MC Rotterdam, Maastric
 
 ---
 
-The logo includes an icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.
+The PancCanNet logo includes an icon made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.
