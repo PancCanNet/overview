@@ -25,6 +25,30 @@ differ to the information on the project website.
 First, we need to make sure all required R-packages are installed. Run
 the following code snippet to install and load the libraries.
 
+``` r
+# check if libraries are installed > otherwise install
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if(!"rstudioapi" %in% installed.packages()) BiocManager::install("rstudioapi")
+if(!"rWikiPathways" %in% installed.packages()) BiocManager::install("rWikiPathways")
+if(!"RCy3" %in% installed.packages()) BiocManager::install("RCy3")
+if(!"data.table" %in% installed.packages()) BiocManager::install("data.table")
+if(!"heatmaply" %in% installed.packages()) BiocManager::install("heatmaply")
+if(!"igraph" %in% installed.packages()) BiocManager::install("igraph")
+if(!"RColorBrewer" %in% installed.packages()) BiocManager::install("RColorBrewer")
+
+# load required libraries
+library(rstudioapi)
+library(rWikiPathways)
+library(RCy3)
+library(data.table)
+library(heatmaply)
+library(igraph)
+library(RColorBrewer)
+
+# set working environment to source file
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+```
+
 ## Explore PancCanNet pathway resources
 
 The following section will download the current PancCanNet pathway
