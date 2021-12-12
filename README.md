@@ -24,6 +24,10 @@ If you are interested in joining our intiative and contribute to the pathway col
 
 ### Data analysis workflows
 
+* [Analysis workflow 1](workflows/workflow1.md): Exploration of the PancCanNet pathway collection
+* [Analysis workflow 2](workflows/workflow2.md): Analysing a pancreatic cancer gene expression dataset
+* Analysis workflow 3: Analysing a pancreatic cancer immune panel dataset
+
 ---
 
 ### Team
