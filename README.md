@@ -26,6 +26,8 @@ If you are interested in joining our intiative and contribute to the pathway col
 * [Analysis workflow 2](workflows/workflow2.md): Analysing a pancreatic cancer gene expression dataset
 * Analysis workflow 3: Analysing a pancreatic cancer immune panel dataset
 
+---
+
 ### Workshops
 
 We organized two different workshops:
