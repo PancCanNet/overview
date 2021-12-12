@@ -81,8 +81,8 @@ print(paste0("The pathways in the PancCanNet collection currently contain ",leng
 ```
 
 **Output**
-[1] "The PancCanNet pathway portal currently contains 37 pathways."
-[2] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
+* [1] "The PancCanNet pathway portal currently contains 37 pathways."
+* [2] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
 ![alt text](fig/workflow1-fig1.png)
 
 
