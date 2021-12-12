@@ -360,7 +360,7 @@ node.colors <- c(rev(brewer.pal(3, "RdBu")))
 setNodeColorMapping("log2foldchange", c(-1,0,1), node.colors, default.color = "#99FF99", style.name = "data")
 
 RCy3::setNodeLabelMapping(table.column = "Gene.Name", style.name = "data")
-```r
+```
 
 **Output:**
 * [1] "2537 out of 2688 genes in PancCanNet pathways are measured in the dataset."
