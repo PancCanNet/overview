@@ -59,11 +59,7 @@ pathways.
 # retrieve pathway list
 pwys <- rWikiPathways::getPathwayIdsByCurationTag("Curation:PancCanNet")
 print(paste0("The PancCanNet pathway portal currently contains ",length(pwys)," pathways."))
-```
 
-    ## [1] "The PancCanNet pathway portal currently contains 37 pathways."
-
-``` r
 # retrieve gene list per pathway
 mylist <- list()
 x <- 1
@@ -79,16 +75,16 @@ rm(mylist,x,genes,p,g)
 
 # report pathway size distribution
 hist(table(pwy.genes$V1), breaks=15, xlab="Pathway size (num of genes)", ylab = "Num of pathways", main="Pathway size distribution", col="#FFAAAA",border="#550000")
-```
 
-![](PancCanNet-workflow1_files/figure-markdown_github/collection-1.png)
-
-``` r
 # report unique number of genes in PancCanNet pathways
 print(paste0("The pathways in the PancCanNet collection currently contain ",length(unique(pwy.genes$V2))," unique genes."))
 ```
 
-    ## [1] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
+**Output**
+```
+[1] "The PancCanNet pathway portal currently contains 37 pathways."
+[2] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
+```
 
 Let’s explore the overlap and crosstalk between the pathways in the
 collection. We will first calculate the Jaccard similarity score (based
