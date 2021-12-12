@@ -316,7 +316,7 @@ RCy3::setVisualStyle("specificity")
 
 RCy3::toggleGraphicsDetails()
 RCy3::setNodeColorMapping("Specificity", c('only','some','many','all','none'), c("#0594F4","#17285E","#4D5B88","#737C9D","#000000"), mapping.type = 'd', default.color = "#FFF7BC", style.name = "specificity")
-```r
+```
 
 **Output**
 * There are 25 genes only detected in pancreatic cancer of which 1 are in PancCanNet pathways.
