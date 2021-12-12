@@ -1,6 +1,7 @@
 # Workflow 1: Exploration PancCanNet pathway collection
 
-Download .Rmd file for the workflow [here](PancCanNet-workflow1.Rmd). Open the .Rmd file in RStudio (see installation guide here) and walk through one section after the other. 
+* Download .Rmd file for the workflow [here](PancCanNet-workflow1.Rmd). 
+* * Open the .Rmd file in RStudio (see installation guide here) and walk through one section after the other. 
 
 ## Introduction
 
