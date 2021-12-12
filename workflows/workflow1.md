@@ -83,11 +83,6 @@ hist(table(pwy.genes$V1), breaks=15, xlab="Pathway size (num of genes)", ylab = 
 print(paste0("The pathways in the PancCanNet collection currently contain ",length(unique(pwy.genes$V2))," unique genes."))
 ```
 
-**Output**
-* [1] "The PancCanNet pathway portal currently contains 37 pathways."
-* [2] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
-<img src="fig/workflow1-fig1.png" alt="fig1" width="300"/>
-
 ---
 
 Let’s explore the overlap and crosstalk between the pathways in the
@@ -118,8 +113,6 @@ heatmaply(jaccard,main="Similarity plot PancCanNet pathways",plot_method = "plot
 
 rm(genes1,genes2,i,j,intersection,union, score)
 ```
-<img src="fig/workflow1-fig2.png" alt="fig1" width="300"/>
-
 
 **Jaccard similarity heatmap:** 
 
@@ -187,24 +180,6 @@ RCy3::setNodeBorderWidthBypass(hubs$Gene, new.sizes = 10)
 rm(runningRemote,graph,table,notebookIsRunning)
 ```
 
-**Output**
-
-_Hub nodes:_
-| Gene | Gene name | # Pathways | 
-|:----:|------|-------|
-| ENSG00000142208 | AKT1 | 16 | 
-| ENSG00000100030 | MAPK1 | 15 | 
-| ENSG00000169032 | MAP2K1 | 13 | 
-| ENSG00000109320 | NFKB1 | 13 | 
-| ENSG00000136238 | RAC1 | 12 | 
-| ENSG00000102882 | MAPK3 | 12 | 
-| ENSG00000145675 | PIK3R1 | 12 | 
-| ENSG00000174775 | HRAS | 11 | 
-| ENSG00000132155 | RAF1 | 11 | 
-| ENSG00000105647 | PIK3R2 | 11 | 
-    
-<img src="fig/workflow1-fig3.png" alt="fig1" width="300"/>
-
 Explore the network in Cytoscape. You can see a lot of crosstalk and
 overlap between the pathways in the portal. The hub nodes are
 highlighted with a thick border. You can change the hub degree cutoff if
@@ -253,13 +228,6 @@ RCy3::setNodeBorderWidthBypass(fav.markers.pwy$Ensembl, new.sizes = 10)
 RCy3::setNodeBorderColorBypass(unfav.markers.pwy$Ensembl, new.colors = "#052549")
 RCy3::setNodeBorderWidthBypass(unfav.markers.pwy$Ensembl, new.sizes = 10)
 ```
-
-**Output**
-* There are currently 855 known favorable prognostic markers for pancreatic cancer.
-* There are currently 668 known unfavorable prognostic markers for pancreatic cancer.
-* Number of favorable markers in PancCanNet pathways: 57
-* Number of unfavorable markers in PancCanNet pathways: 113
-
 
 Explore the network in Cytoscape. You will see that most pathways
 contain at least a couple of marker genes, both favorable (red border
@@ -318,13 +286,6 @@ RCy3::toggleGraphicsDetails()
 RCy3::setNodeColorMapping("Specificity", c('only','some','many','all','none'), c("#0594F4","#17285E","#4D5B88","#737C9D","#000000"), mapping.type = 'd', default.color = "#FFF7BC", style.name = "specificity")
 ```
 
-**Output**
-* There are 25 genes only detected in pancreatic cancer of which 1 are in PancCanNet pathways.
-* There are 364 genes detected in some cancers incl. pancreatic cancer of which 17 are in PancCanNet pathways.
-* There are 3154 genes detected in many cancers incl. pancreatic cancer of which 228 are in PancCanNet pathways.
-* There are 10861 detected in all cancers of which 1015 are in PancCanNet pathways.
-
-
 Explore the network in Cytoscape. The darker the color the more specific
 the expression is pancreatic cancer.
 
@@ -364,10 +325,6 @@ setNodeColorMapping("log2foldchange", c(-1,0,1), node.colors, default.color = "#
 
 RCy3::setNodeLabelMapping(table.column = "Gene.Name", style.name = "data")
 ```
-
-**Output:**
-* [1] "2537 out of 2688 genes in PancCanNet pathways are measured in the dataset."
-
 
 You can now explore the gene expression changes in the PancCanNet
 pathways. (blue = down-regulated, white = not changed, red =
