@@ -222,32 +222,19 @@ link <- "https://www.proteinatlas.org/api/search_download.php?search=prognostic%
 fav.markers <- read.table(file = link, sep = '\t', header = TRUE)
 
 cat(paste0("There are currently ", length(fav.markers$Ensembl), " known favorable prognostic markers for pancreatic cancer."))
-```
 
-    ## There are currently 855 known favorable prognostic markers for pancreatic cancer.
-
-``` r
 # unfavorable prognostic markers
 link <- "https://www.proteinatlas.org/api/search_download.php?search=prognostic%3Apancreatic%20cancer%3BUnfavorable%20AND%20sort_by%3Aprognostic%20pancreatic%20cancer&columns=g,eg,up,rnacas,rnacad,rnacass,rnacasm,prognostic_pancreatic_cancer,t_RNA_pancreas,sc_RNA_Pancreatic_endocrine_cells&compress=no&format=tsv"
 unfav.markers <- read.table(file = link, sep = '\t', header = TRUE)
 
 cat(paste0("There are currently ", length(unfav.markers$Ensembl), " known unfavorable prognostic markers for pancreatic cancer."))
-```
 
-    ## There are currently 668 known unfavorable prognostic markers for pancreatic cancer.
-
-``` r
 # how many pathways contain prognostic markers
 fav.markers.pwy <- fav.markers[fav.markers$Ensembl %in% pwy.genes$V2,]
 unfav.markers.pwy <- unfav.markers[unfav.markers$Ensembl %in% pwy.genes$V2,]
 
 cat(paste0("Number of favorable markers in PancCanNet pathways: ",length(fav.markers.pwy$Ensembl),"\n","Number of unfavorable markers in PancCanNet pathways: ",length(unfav.markers.pwy$Ensembl)))
-```
 
-    ## Number of favorable markers in PancCanNet pathways: 57
-    ## Number of unfavorable markers in PancCanNet pathways: 113
-
-``` r
 # visualize prognostic markers in pathway gene network
 suid.markers <- RCy3::cloneNetwork(suid)
 RCy3::setCurrentNetwork(suid.markers)
@@ -257,17 +244,19 @@ RCy3::renameNetwork("PancCanNet pathway-gene network: Markers")
 toggleGraphicsDetails()
 RCy3::copyVisualStyle("crosstalk","markers")
 RCy3::setVisualStyle("markers")
-```
 
-    ##                 message 
-    ## "Visual Style applied."
-
-``` r
 RCy3::setNodeBorderColorBypass(fav.markers.pwy$Ensembl, new.colors = "#902D10")
 RCy3::setNodeBorderWidthBypass(fav.markers.pwy$Ensembl, new.sizes = 10)
 RCy3::setNodeBorderColorBypass(unfav.markers.pwy$Ensembl, new.colors = "#052549")
 RCy3::setNodeBorderWidthBypass(unfav.markers.pwy$Ensembl, new.sizes = 10)
 ```
+
+**Output**
+* There are currently 855 known favorable prognostic markers for pancreatic cancer.
+* There are currently 668 known unfavorable prognostic markers for pancreatic cancer.
+* Number of favorable markers in PancCanNet pathways: 57
+* Number of unfavorable markers in PancCanNet pathways: 113
+
 
 Explore the network in Cytoscape. You will see that most pathways
 contain at least a couple of marker genes, both favorable (red border
@@ -302,17 +291,7 @@ pancreatic.cancer.many.pwy <- pancreatic.cancer.many[pancreatic.cancer.many$Ense
 pancreatic.cancer.all.pwy <- pancreatic.cancer.all[pancreatic.cancer.all$Ensembl %in% pwy.genes$V2,]
 
 cat(paste0("There are ",length(pancreatic.cancer.only$Ensembl), " genes only detected in pancreatic cancer of which ",length(pancreatic.cancer.only.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.some$Ensembl), " genes detected in some cancers incl. pancreatic cancer of which ",length(pancreatic.cancer.some.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.many$Ensembl), " genes detected in many cancers incl. pancreatic cancer of which ",length(pancreatic.cancer.many.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.all$Ensembl), " detected in all cancers of which ",length(pancreatic.cancer.all.pwy$Ensembl), " are in PancCanNet pathways."))
-```
 
-    ## There are 25 genes only detected in pancreatic cancer of which 1 are in PancCanNet pathways.
-    ## 
-    ## There are 364 genes detected in some cancers incl. pancreatic cancer of which 17 are in PancCanNet pathways.
-    ## 
-    ## There are 3154 genes detected in many cancers incl. pancreatic cancer of which 228 are in PancCanNet pathways.
-    ## 
-    ## There are 10861 detected in all cancers of which 1015 are in PancCanNet pathways.
-
-``` r
 # visualize specificity in pathway gene network
 suid.spec <- RCy3::cloneNetwork(suid)
 RCy3::setCurrentNetwork(suid.spec)
@@ -327,25 +306,21 @@ genes[genes$name %in% pancreatic.cancer.some$Ensembl,"Specificity"] <- "some"
 genes[genes$name %in% pancreatic.cancer.many$Ensembl,"Specificity"] <- "many"
 genes[genes$name %in% pancreatic.cancer.all$Ensembl,"Specificity"] <- "all"
 RCy3::loadTableData(genes,data.key.column = "name", table.key.column = "name")
-```
 
-    ## [1] "Success: Data loaded in defaultnode table"
-
-``` r
 # adapt visual style
 RCy3::copyVisualStyle("crosstalk","specificity")
 RCy3::setVisualStyle("specificity")
-```
 
-    ##                 message 
-    ## "Visual Style applied."
-
-``` r
 RCy3::toggleGraphicsDetails()
 RCy3::setNodeColorMapping("Specificity", c('only','some','many','all','none'), c("#0594F4","#17285E","#4D5B88","#737C9D","#000000"), mapping.type = 'd', default.color = "#FFF7BC", style.name = "specificity")
-```
+```r
 
-    ## NULL
+**Output**
+* There are 25 genes only detected in pancreatic cancer of which 1 are in PancCanNet pathways.
+* There are 364 genes detected in some cancers incl. pancreatic cancer of which 17 are in PancCanNet pathways.
+* There are 3154 genes detected in many cancers incl. pancreatic cancer of which 228 are in PancCanNet pathways.
+* There are 10861 detected in all cancers of which 1015 are in PancCanNet pathways.
+
 
 Explore the network in Cytoscape. The darker the color the more specific
 the expression is pancreatic cancer.
@@ -368,13 +343,6 @@ data <- read.delim("data/E-GEOD-15471.tsv")
 pwy.data <- merge(pwy.genes, data, by.x="V2", by.y="Gene.ID")
 
 print(paste0(length(pwy.data$Gene.Name)," out of ", length(pwy.genes$V1), " genes in PancCanNet pathways are measured in the dataset."))
-```
-
-    ## [1] "2537 out of 2688 genes in PancCanNet pathways are measured in the dataset."
-
-``` r
-# heatmap (pathways, genes)
-#heatmaply(pwy.data[,c(1,2,4)],main="",plot_method = "plotly", colors = viridis(n = 256,  option = "magma"))
 
 # pathway-gene network
 suid.viz <- RCy3::cloneNetwork(suid)
@@ -382,32 +350,21 @@ RCy3::setCurrentNetwork(suid.viz)
 RCy3::renameNetwork("PancCanNet pathway-gene network: Data visualization")
 
 RCy3::loadTableData(pwy.data, data.key.column = "V2", table.key.column = "name")
-```
 
-    ## [1] "Success: Data loaded in defaultnode table"
-
-``` r
 # adapt visual style
 RCy3::copyVisualStyle("crosstalk","data")
 RCy3::setVisualStyle("data")
-```
 
-    ##                 message 
-    ## "Visual Style applied."
-
-``` r
 RCy3::toggleGraphicsDetails()
 node.colors <- c(rev(brewer.pal(3, "RdBu")))
 setNodeColorMapping("log2foldchange", c(-1,0,1), node.colors, default.color = "#99FF99", style.name = "data")
-```
 
-    ## NULL
-
-``` r
 RCy3::setNodeLabelMapping(table.column = "Gene.Name", style.name = "data")
-```
+```r
 
-    ## NULL
+**Output:**
+* [1] "2537 out of 2688 genes in PancCanNet pathways are measured in the dataset."
+
 
 You can now explore the gene expression changes in the PancCanNet
 pathways. (blue = down-regulated, white = not changed, red =
