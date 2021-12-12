@@ -13,9 +13,6 @@ The [PancCanNet pathway portal](https://www.wikipathways.org/index.php/Portal:Pa
 * **License**: CC0
 * **Availability**:
   * GPML files: [Download](http://www.wikipathways.org//wpi/batchDownload.php?species=Homo%20sapiens&fileType=gpml&tag=Curation:PancCanNet)
-  * RDF: xxx
-  * GMT: xxx
-  * Curation reports: xxx
   * Pathway-gene network: xxx
 
 If you are interested in joining our intiative and contribute to the pathway collection or request pathways to be added, please do not hesistate to contact us!
