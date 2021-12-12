@@ -1,5 +1,5 @@
 # PancCanNet Project
-<img src="logo.png" alt="logo" width="180" align="right"/>
+<img src="logo.png" alt="logo" width="150" align="right"/>
 
 The aim of this project is the creation of a **biological pathway community portal** (PancCanNet) as a unified knowledge base for pancreatic cancer. The portal enables expert clinical researchers (medical and scientific) to add and curate pathway content and allows **programmatic access for downstream knowledge integration, data analysis, and data visualization**. PancCanNet provides a resource for determining the functional impact of multi-omics experimental data with the aim to understand the mechanisms of treatment resistance, discover novel biomarkers and develop personal treatment options for pancreatic cancer patients.
 
@@ -39,3 +39,7 @@ We organized two different workshops:
 ### Team
 
 The PancCanNet project is a collaboration between Erasmus MC Rotterdam, Maastricht University and Omnigen.
+
+---
+
+The logo includes an icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.
