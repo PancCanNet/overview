@@ -83,8 +83,7 @@ print(paste0("The pathways in the PancCanNet collection currently contain ",leng
 **Output**
 * [1] "The PancCanNet pathway portal currently contains 37 pathways."
 * [2] "The pathways in the PancCanNet collection currently contain 1438 unique genes."
-![alt text](fig/workflow1-fig1.png)
-
+<img src="fig/workflow1-fig1.png" alt="fig1" width="300"/>
 
 Let’s explore the overlap and crosstalk between the pathways in the
 collection. We will first calculate the Jaccard similarity score (based
