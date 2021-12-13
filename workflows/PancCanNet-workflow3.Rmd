@@ -1,0 +1,157 @@
+---
+title: "PancCanNet Workflow 3 PPI network analysis"
+author: "mkutmon"
+date: "1 September 2021"
+version: 1.0
+license: "MIT License"
+output: 
+  md_document:
+    variant: markdown_github
+always_allow_html: true
+---
+
+# General instructions (read before running the code snippets)
+In this second workflow, we will create a protein-protein interaction network of the up- and down-regulated genes in the different pancreatic cancer subtypes. Afterwards, we will extend the network with gene-pathway associations to see in which pathways the differentially expressed genes are present in.
+
+* The script contains several code snippets which should be run one after the other. 
+* Make sure all the required packages are installed beforehand (BiocManager::install(...)). 
+* Make sure you have Cytoscape installed (version 3.8.0+) and running before you start running the script. 
+
+*** 
+
+## R environment setup
+
+First, we need to make sure all required R-packages are installed. Run the following code snippet to install and load the libraries. 
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if(!"dplyr" %in% installed.packages()) BiocManager::install("dplyr")
+if(!"rWikiPathways" %in% installed.packages()) BiocManager::install("rWikiPathways")
+if(!"RCy3" %in% installed.packages()) BiocManager::install("RCy3")
+if(!"RColorBrewer" %in% installed.packages()) BiocManager::install("RColorBrewer")
+if(!"rstudioapi" %in% installed.packages()) BiocManager::install("rstudioapi")
+if(!"readr" %in% installed.packages()) BiocManager::install("readr")
+
+library(dplyr)
+library(rWikiPathways)
+library(RCy3)
+library(RColorBrewer)
+library(rstudioapi)
+library(readr)
+
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+```
+
+*** 
+
+## Load differential gene expression dataset
+
+In the following section, you will load a differential gene expression dataset. You can easily replace the example dataset with your own dataset (copy it in the "data" folder and change the file name below). 
+In this workflow, we will identify affected pathways in two pancreatic cancer subtypes, and visualize the data on the pathway models. 
+
+```{r}
+dataset <- read.delim("data/GSE71729-dataset.txt")
+
+# filter genes without Entrez Gene identifier
+data.panc <- dataset %>% tidyr::drop_na(Entrez.Gene)
+colnames(data.panc)[2] <- "GeneName"
+colnames(data.panc)[1] <- "GeneId"
+
+# DEG in either classical or basal subtype
+# stricter cutoff in this example
+fc_cutoff <- 1
+
+deg <- unique(data.panc[(data.panc$B_adj.P.Val < 0.05 & abs(data.panc$B_logFC) > fc_cutoff) | (data.panc$C_adj.P.Val < 0.05 & abs(data.panc$C_logFC) > fc_cutoff),c(1,2)])
+
+```
+
+***
+
+# PPI network analysis
+
+Next, we will create a protein-protein interaction network with all differentially expressed genes using the STRING database. 
+
+```{r}
+RCy3::cytoscapePing()
+installApp('stringApp') 
+
+query <- format_csv(as.data.frame(deg$GeneId), col_names=F, quote_escape = "double", eol =",")
+commandsRun(paste0('string protein query cutoff=0.9 newNetName="PPI network" query="',query,'" limit=0'))
+
+# network will be opened in Cytoscape (this might take a while)
+```
+
+> Let's explore the network
+
+- **Q1**: How many of the differentially expressed genes were found in STRING?
+- **Q2**: Are all genes connected in the network? 
+- **Q3**: Change the confidence cutoff in the commandsRun call from 0.9 (high confidence) to 0.4 (medium confidence). What changes? 
+
+***
+
+## Data visualization
+
+Let's now visualize the gene expression data on the PPI network.
+
+```{r}
+loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "query term")
+
+RCy3::installApp("enhancedGraphics")
+RCy3::copyVisualStyle("default", "my_style_heatmap")
+RCy3::setNodeLabelMapping("display name", style.name = "my_style_heatmap")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "my_style_heatmap", colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC"))
+
+RCy3::setVisualStyle("my_style_heatmap")
+```
+
+> Interpretation
+
+- **Q4**: Do you see clusters of up- or down-regulated genes in the PPI network?
+
+***
+
+## Pathway information
+
+Next, we will add information about participation of the differentially expressed genes in molecular pathway models.
+
+```{r}
+# run CyTargetLinker
+RCy3::installApp("CyTargetLinker")
+
+wp <- file.path(getwd(), "data/wikipathways-hsa-20200710.xgmml")
+
+commandsRun(paste0('cytargetlinker extend idAttribute="query term" linkSetFiles="', wp, '"'))
+commandsRun('cytargetlinker applyLayout network="current"')
+commandsRun('cytargetlinker applyVisualstyle network="current"')
+RCy3::setNodeLabelMapping("display name", style.name="CyTargetLinker")
+
+# there is an issue in the latest version with visualization of the added edges - the workaround below solves this for now
+suid.ctl <- RCy3::cloneNetwork()
+RCy3::setCurrentNetwork(suid.ctl)
+RCy3::setVisualStyle("default")
+RCy3::setVisualStyle("CyTargetLinker")
+
+# TODO: VISUAL STYLE
+loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "query term")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "CyTargetLinker", colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC"))
+
+```
+
+> Interpretation
+
+- **Q5**: How many differentially expressed genes are in at least one of the pathways? 
+- **Q6**: Are the genes also functionally related based on the PPI network?
+
+***
+
+## Save Cytoscape output and session
+
+```{r}
+# Saving output
+png.file <- file.path(getwd(), "ppi-network.png")
+exportImage(png.file,'PNG', zoom = 500)
+cys.file <- file.path(getwd(), "ppi-network.cys")
+saveSession(cys.file) 
+
+#comment following line if you want to manipulate the visualization in Cytoscape
+RCy3::closeSession(save.before.closing = F)
+```

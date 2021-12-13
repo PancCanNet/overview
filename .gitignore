@@ -1,0 +1,5 @@
+workflows/output/*
+workflows/PancCanNet-workflow2_files*
+workflows/PancCanNet-workflow1_files*
+workflows/wikipathways-*
+workflows/PancCanNet-workflow2.md

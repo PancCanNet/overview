@@ -1,8 +1,11 @@
 ---
 title: "PancCanNet-workflow2-enrichment.Rmd"
 author: "mkutmon"
-date: "2021-11-26"
-output: html_document
+date: "2021-11-12"
+output: 
+  md_document:
+    variant: markdown_github
+always_allow_html: true
 ---
 
 ## Introduction
@@ -27,6 +30,8 @@ if(!"EnhancedVolcano" %in% installed.packages()) BiocManager::install("EnhancedV
 if(!"VennDiagram" %in% installed.packages()) BiocManager::install("VennDiagram")
 if(!"clusterProfiler" %in% installed.packages()) BiocManager::install("clusterProfiler")
 if(!"dplyr" %in% installed.packages()) BiocManager::install("dplyr")
+if(!"RColorBrewer" %in% installed.packages()) BiocManager::install("RColorBrewer")
+
 
 # load required libraries
 library(rstudioapi)
@@ -36,9 +41,10 @@ library(EnhancedVolcano)
 library(VennDiagram)
 library(clusterProfiler)
 library(dplyr)
+library(RColorBrewer)
 
 # set working environment to source file
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 ```
 
@@ -153,7 +159,7 @@ ggplot(ewp.basal[1:num.pathways.basal], aes(x=reorder(Description, -pvalue), y=C
   geom_bar(stat ="identity", fill="#BA8CD7") +
   coord_flip() +
   labs(x="", y="Basal DEG gene count", fill="") +
-  theme(axis.text=element_text(size=25)) + 
+  theme(axis.text=element_text(size=15)) + 
   theme(legend.position="none")
 dev.off()
 
@@ -161,7 +167,7 @@ ggplot(ewp.basal[1:num.pathways.basal], aes(x=reorder(Description, -pvalue), y=C
   geom_bar(stat ="identity", fill="#BA8CD7") +
   coord_flip() +
   labs(x="", y="Basal DEG gene count", fill="") +
-  theme(axis.text=element_text(size=25)) + 
+  theme(axis.text=element_text(size=15)) + 
   theme(legend.position="none")
 
 # TODO: highlight panccannet pathways!
@@ -190,7 +196,7 @@ ggplot(ewp.classical[1:num.pathways.classical], aes(x=reorder(Description, -pval
   geom_bar(stat ="identity", fill="#BA8CD7") +
   coord_flip() +
   labs(x="", y="Classical DEG gene count", fill="") +
-  theme(axis.text=element_text(size=25)) + 
+  theme(axis.text=element_text(size=15)) + 
   theme(legend.position="none")
 
 png('output/w2-fig5.png', width = 1200, height=1000)
@@ -198,7 +204,7 @@ ggplot(ewp.classical[1:num.pathways.classical], aes(x=reorder(Description, -pval
   geom_bar(stat ="identity", fill="#BA8CD7") +
   coord_flip() +
   labs(x="", y="Classical DEG gene count", fill="") +
-  theme(axis.text=element_text(size=25)) + 
+  theme(axis.text=element_text(size=15)) + 
   theme(legend.position="none")
 dev.off()
 
@@ -218,6 +224,8 @@ venn.diagram(x = list(ewp.basal.res$ID, ewp.classical.res$ID),
 There is often crosstalk and overlap between pathways enriched in gene expression analyses. The following step visualizes the overlap between the enriched pathways in a pathway-gene network. 
 
 The genes not present in any pathway are included in the visualization but can be removed if that is preferred.
+
+Please make sure you have Cytoscape opened before you run this code!
 
 ```{r}
 pwy <- unique(ewp.basal.res[,c(1,2)])
@@ -310,21 +318,26 @@ To study the detailed molecular mechanisms, you can also open enriched pathway m
 
 ```{r vis}
 # for all enriched pathways
-
-RCy3::commandsRun('wikipathways import-as-pathway id=WP5055') 
-toggleGraphicsDetails()
-loadTableData(data.panc, data.key.column = "GeneName", table.key.column = "name")
-
-# apply visual style 
-data.values = c(-1,0,1) 
-node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
-RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "WikiPathways")
-
-RCy3::setVisualStyle("WikiPathways")
-
-png.file <- file.path(getwd(), "output/w2-fig9.png")
-exportImage(png.file,'PNG', zoom = 500)
-
+enrich.pwy <- rbind(ewp.basal.res,ewp.classical.res)
+#for(p in unique(enrich.pwy$ID)) {
+p <- "WP2877"
+  RCy3::commandsRun(paste0("wikipathways import-as-pathway id=",p))
+  toggleGraphicsDetails()
+  loadTableData(table = "node", data = data.panc, data.key.column = "GeneName", table.key.column = "name")
+  
+  # apply visual style 
+  RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "WikiPathways")
+  
+  RCy3::setVisualStyle("WikiPathways")
+  
+  png.file <- file.path(getwd(), paste0("output/w2-",p,".png"))
+  exportImage(png.file,'PNG', zoom = 500)
+#}
 ```
 
+## Save session
 
+```{r session}
+cys.file <- file.path(getwd(), "output/workflow2.cys")
+saveSession(cys.file) 
+```
