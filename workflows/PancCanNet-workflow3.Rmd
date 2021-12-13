@@ -134,6 +134,9 @@ RCy3::setVisualStyle("CyTargetLinker")
 loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "query term")
 RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "CyTargetLinker", colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC"))
 
+png.file <- file.path(getwd(), "output/w3-fig1.png")
+exportImage(png.file,'PNG', zoom = 500)
+
 ```
 
 > Interpretation
@@ -147,9 +150,8 @@ RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "
 
 ```{r}
 # Saving output
-png.file <- file.path(getwd(), "ppi-network.png")
-exportImage(png.file,'PNG', zoom = 500)
-cys.file <- file.path(getwd(), "ppi-network.cys")
+
+cys.file <- file.path(getwd(), "output/workflow3.cys")
 saveSession(cys.file) 
 
 #comment following line if you want to manipulate the visualization in Cytoscape
