@@ -30,6 +30,8 @@ if(!"RCy3" %in% installed.packages()) BiocManager::install("RCy3")
 if(!"RColorBrewer" %in% installed.packages()) BiocManager::install("RColorBrewer")
 if(!"rstudioapi" %in% installed.packages()) BiocManager::install("rstudioapi")
 if(!"readr" %in% installed.packages()) BiocManager::install("readr")
+if(!"org.Hs.eg.db" %in% installed.packages()) BiocManager::install("org.Hs.eg.db")
+
 
 library(dplyr)
 library(rWikiPathways)
@@ -37,6 +39,7 @@ library(RCy3)
 library(RColorBrewer)
 library(rstudioapi)
 library(readr)
+library(org.Hs.eg.db)
 
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 ```
@@ -74,7 +77,7 @@ Next, we will create a protein-protein interaction network with all differential
 RCy3::cytoscapePing()
 installApp('stringApp') 
 
-query <- format_csv(as.data.frame(deg$GeneId), col_names=F, quote_escape = "double", eol =",")
+query <- format_csv(as.data.frame(deg$GeneId), col_names=F, escape = "double", eol =",")
 commandsRun(paste0('string protein query cutoff=0.9 newNetName="PPI network" query="',query,'" limit=0'))
 
 # network will be opened in Cytoscape (this might take a while)
