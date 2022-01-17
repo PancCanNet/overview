@@ -160,3 +160,9 @@ saveSession(cys.file)
 #comment following line if you want to manipulate the visualization in Cytoscape
 RCy3::closeSession(save.before.closing = F)
 ```
+
+## Clear environment
+
+```{r}
+rm(list=ls())
+```
