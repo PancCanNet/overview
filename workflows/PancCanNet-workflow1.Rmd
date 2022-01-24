@@ -64,13 +64,14 @@ for(p in pwys) {
   }
 }
 pwy.genes <- as.data.frame(do.call("rbind",mylist))
+colnames(pwy.genes) <- c("wpid","gene")
 rm(mylist,x,genes,p,g)
 
 # report pathway size distribution
-hist(table(pwy.genes$V1), breaks=15, xlab="Pathway size (num of genes)", ylab = "Num of pathways", main="Pathway size distribution", col="#FFAAAA",border="#550000")
+hist(table(pwy.genes$wpid), breaks=15, xlab="Pathway size (num of genes)", ylab = "Num of pathways", main="Pathway size distribution", col="#FFAAAA",border="#550000")
 
 # report unique number of genes in PancCanNet pathways
-print(paste0("The pathways in the PancCanNet collection currently contain ",length(unique(pwy.genes$V2))," unique genes."))
+print(paste0("The pathways in the PancCanNet collection currently contain ",length(unique(pwy.genes$gene))," unique genes."))
 
 ```
 
@@ -81,8 +82,8 @@ Let's explore the overlap and crosstalk between the pathways in the collection. 
 jaccard <- matrix(ncol=length(pwys), nrow=length(pwys))
 for(i in 1:length(pwys)) {
   for(j in i:length(pwys)) {
-    genes1 <- pwy.genes[pwy.genes$V1 == pwys[i],2]
-    genes2 <- pwy.genes[pwy.genes$V1 == pwys[j],2]
+    genes1 <- pwy.genes[pwy.genes$wpid == pwys[i],2]
+    genes2 <- pwy.genes[pwy.genes$wpid == pwys[j],2]
     intersection = length(intersect(genes1, genes2))
     union = length(genes1) + length(genes2) - intersection
     score <- (intersection/union)
@@ -177,8 +178,8 @@ unfav.markers <- read.table(file = link, sep = '\t', header = TRUE)
 cat(paste0("There are currently ", length(unfav.markers$Ensembl), " known unfavorable prognostic markers for pancreatic cancer."))
 
 # how many pathways contain prognostic markers
-fav.markers.pwy <- fav.markers[fav.markers$Ensembl %in% pwy.genes$V2,]
-unfav.markers.pwy <- unfav.markers[unfav.markers$Ensembl %in% pwy.genes$V2,]
+fav.markers.pwy <- fav.markers[fav.markers$Ensembl %in% pwy.genes$gene,]
+unfav.markers.pwy <- unfav.markers[unfav.markers$Ensembl %in% pwy.genes$gene,]
 
 cat(paste0("Number of favorable markers in PancCanNet pathways: ",length(fav.markers.pwy$Ensembl),"\n","Number of unfavorable markers in PancCanNet pathways: ",length(unfav.markers.pwy$Ensembl)))
 
@@ -221,10 +222,10 @@ pancreatic.cancer.many <- read.table(file = link, sep = '\t', header = TRUE)
 link <- "https://www.proteinatlas.org/api/search_download.php?search=cancer_category_rna%3Apancreatic%20cancer%3BDetected%20in%20all&columns=g,eg&compress=no&format=tsv"
 pancreatic.cancer.all <- read.table(file = link, sep = '\t', header = TRUE)
 
-pancreatic.cancer.only.pwy <- pancreatic.cancer.only[pancreatic.cancer.only$Ensembl %in% pwy.genes$V2,]
-pancreatic.cancer.some.pwy <- pancreatic.cancer.some[pancreatic.cancer.some$Ensembl %in% pwy.genes$V2,]
-pancreatic.cancer.many.pwy <- pancreatic.cancer.many[pancreatic.cancer.many$Ensembl %in% pwy.genes$V2,]
-pancreatic.cancer.all.pwy <- pancreatic.cancer.all[pancreatic.cancer.all$Ensembl %in% pwy.genes$V2,]
+pancreatic.cancer.only.pwy <- pancreatic.cancer.only[pancreatic.cancer.only$Ensembl %in% pwy.genes$gene,]
+pancreatic.cancer.some.pwy <- pancreatic.cancer.some[pancreatic.cancer.some$Ensembl %in% pwy.genes$gene,]
+pancreatic.cancer.many.pwy <- pancreatic.cancer.many[pancreatic.cancer.many$Ensembl %in% pwy.genes$gene,]
+pancreatic.cancer.all.pwy <- pancreatic.cancer.all[pancreatic.cancer.all$Ensembl %in% pwy.genes$gene,]
 
 cat(paste0("There are ",length(pancreatic.cancer.only$Ensembl), " genes only detected in pancreatic cancer of which ",length(pancreatic.cancer.only.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.some$Ensembl), " genes detected in some cancers incl. pancreatic cancer of which ",length(pancreatic.cancer.some.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.many$Ensembl), " genes detected in many cancers incl. pancreatic cancer of which ",length(pancreatic.cancer.many.pwy$Ensembl), " are in PancCanNet pathways.\n\n","There are ",length(pancreatic.cancer.all$Ensembl), " detected in all cancers of which ",length(pancreatic.cancer.all.pwy$Ensembl), " are in PancCanNet pathways."))
 
@@ -269,9 +270,9 @@ Ensembl gene id, gene name, log2FC, p-value
 data <- read.delim("data/E-GEOD-15471.tsv")
 
 # overview table > pathway, genes, measured genes, DEGs+, DEGs-
-pwy.data <- merge(pwy.genes, data, by.x="V2", by.y="Gene.ID")
+pwy.data <- merge(pwy.genes, data, by.x="gene", by.y="Gene.ID")
 
-print(paste0(length(pwy.data$Gene.Name)," out of ", length(pwy.genes$V1), " genes in PancCanNet pathways are measured in the dataset."))
+print(paste0(length(pwy.data$Gene.Name)," out of ", length(pwy.genes$wpid), " genes in PancCanNet pathways are measured in the dataset."))
 
 # heatmap (pathways, genes)
 #heatmaply(pwy.data[,c(1,2,4)],main="",plot_method = "plotly", colors = viridis(n = 256,  option = "magma"))
@@ -281,7 +282,7 @@ suid.viz <- RCy3::cloneNetwork(suid)
 RCy3::setCurrentNetwork(suid.viz)
 RCy3::renameNetwork("PancCanNet pathway-gene network: Data visualization")
 
-RCy3::loadTableData(pwy.data, data.key.column = "V2", table.key.column = "name")
+RCy3::loadTableData(pwy.data, data.key.column = "gene", table.key.column = "name")
 
 # adapt visual style
 RCy3::copyVisualStyle("crosstalk","data")
