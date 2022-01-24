@@ -341,3 +341,9 @@ p <- "WP2877"
 cys.file <- file.path(getwd(), "output/workflow2.cys")
 saveSession(cys.file) 
 ```
+
+## Clear environment
+
+```{r}
+rm(list=ls())
+```
