@@ -1,0 +1,204 @@
+---
+title: "PancCanNet Workflow 4 Drug-target identification"
+author: "mkutmon"
+date: "1 September 2021"
+version: 1.0
+license: "MIT License"
+output: 
+  md_document:
+    variant: markdown_github
+always_allow_html: true
+---
+## Introduction
+
+In this fourth workflow, we will visualize transcriptomics data from the second workflow on the Pancreatic adenocarcinoma pathway (WP4263), and extend this pathway with drug-target interaction information from DrugBank. Then we will ... PPI network from String Disease query (“pancreatic cancer”) but with disease query Visualize dataset from workflow 3 Extend pathway with drug-target interaction information from DrugBank. 
+
+...
+
+The PancCanNet project is a collaboration between the Erasmus MC, Maastricht University and Omnigen. The pathway portal is integrated in the collaborative pathway database WikiPathways (http://panccannet.wikipathways.org) and all analysis workflows are available on Github (https://panccannet.github.io). 
+
+Pathway curation is an ongoing effort and we are continuously improving current pathway models and adding new pathway models. The workflow will always use the most-up-to-date information and results can slightly differ to the information on the project website. 
+
+* The script contains several code snippets which should be run one after the other. 
+* Make sure all the required packages are installed beforehand (BiocManager::install(...)). 
+* Make sure you have Cytoscape installed (version 3.8.0+) and running before you start running the script. 
+
+*** 
+
+## R environment setup
+
+First, we need to make sure all required R-packages are installed. Run the following code snippet to install and load the libraries. 
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if(!"dplyr" %in% installed.packages()) BiocManager::install("dplyr")
+if(!"rWikiPathways" %in% installed.packages()) BiocManager::install("rWikiPathways")
+if(!"RCy3" %in% installed.packages()) BiocManager::install("RCy3")
+if(!"RColorBrewer" %in% installed.packages()) BiocManager::install("RColorBrewer")
+if(!"rstudioapi" %in% installed.packages()) BiocManager::install("rstudioapi")
+
+library(dplyr)
+library(rWikiPathways)
+library(RCy3)
+library(RColorBrewer)
+library(rstudioapi) 
+
+
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+```
+
+*** 
+
+## Load differential gene expression dataset
+In the following section, you will load a differential gene expression dataset. You can easily replace the example dataset with your own dataset (copy it in the "data" folder and change the file name below). 
+
+We use this dataset to...Note: the same dataset is used by workflow 2 and 3.
+```{r}
+# load dataset 
+dataset <- read.delim("data/GSE71729-dataset.txt")
+
+# filter genes without Entrez Gene identifier
+data.panc <- dataset %>% tidyr::drop_na(Entrez.Gene)
+colnames(data.panc)[2] <- "GeneName"
+colnames(data.panc)[1] <- "GeneId"
+
+```
+
+***
+
+## Part 1
+
+Please make sure you have Cytoscape opened before you run this code!
+
+```{r}
+
+## Step 1: Open Pancreatic adenocarcinoma pathway as a network (WP4263)
+RCy3::commandsRun('wikipathways import-as-network id=WP4263') 
+toggleGraphicsDetails()
+
+  
+## Step 2: Visualize transcriptomics data on pathway 
+# load data 
+loadTableData(table = "node", data = data.panc, data.key.column = "GeneName", table.key.column = "name")
+# apply visual style 
+RCy3::copyVisualStyle("default","WikiPathways")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "WikiPathways")
+RCy3::setVisualStyle("WikiPathways")
+
+
+## Step 3: Extend pathway with drug-target interaction information from DrugBank
+drugbank <- file.path(getwd(), "data/drugbank-5.1.7.xgmml")
+
+# run CyTargetLinker
+commandsRun(paste0('cytargetlinker extend idAttribute="name" linkSetFiles="', drugbank, '"'))
+commandsRun('cytargetlinker applyLayout network="current"')
+
+drug <- read.delim2("data/drugNodes-5.1.7.txt", stringsAsFactors=TRUE)
+loadTableData(drug, data.key.column="Identifier", table.key.column="name")
+loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "GeneId") #needed? 
+
+## Step 4: Improve visualization
+
+# Visual style
+RCy3::copyVisualStyle("default","wp.vis")
+RCy3::setNodeLabelMapping("label", style.name="wp.vis")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis")
+RCy3::setNodeShapeMapping('Type', c('GeneProduct','Pathway','Drug'), c("ellipse","rectangle","hexagon"), style.name="wp.vis")
+RCy3::setNodeSizeMapping('Type', c('GeneProduct','Pathway'), c(40,25), mapping.type = "d", style.name = "wp.vis")
+#RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+
+setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+
+#data.values = c(-1,0,1) 
+#node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
+#setNodeColorMapping(c("B_logFC"), data.values, node.colors, default.color = "#99FF99", style.name = "wp.vis")
+
+RCy3::setVisualStyle("wp.vis")
+
+my.drugs <- selectNodes("Drug", by.col = "CTL.Type", preserve = FALSE)$nodes 
+clearSelection()
+setNodeColorBypass(my.drugs, "#DD99FF")
+
+log.nodes <- selectNodes(!NA, by.col = "B_logFC", preserve = FALSE)$nodes 
+clearSelection()
+setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+
+
+```
+
+> Interpretation
+
+- **Q1**: 
+- **Q2**: 
+
+***
+
+## Part 2
+
+Please make sure you have Cytoscape opened before you run this code!
+
+
+```{r}
+## Step 1: PPI network from String Disease query (“pancreatic cancer”) using RCy3 + stringApp
+
+RCy3::cytoscapePing()
+installApp('stringApp') 
+
+# network will be opened in Cytoscape (this might take a while) cutoff 0.9? 
+commandsRun(paste0('string disease query cutoff=0.9 disease=pancreatic cancer'))
+
+
+## Step 2: Visualize transcriptomics data on pathway 
+# load data 
+loadTableData(table = "node", data = data.panc, data.key.column = "GeneName", table.key.column = "display name")
+# apply visual style 
+RCy3::setVisualStyle("WikiPathways")
+
+
+## Step 3: Extend pathway with drug-target interaction information from DrugBank
+commandsRun(paste0('cytargetlinker extend idAttribute="display name" linkSetFiles="', drugbank, '"'))
+commandsRun('cytargetlinker applyLayout network="current"')
+
+loadTableData(drug, data.key.column="Identifier", table.key.column="display name")
+loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "GeneId") #needed? 
+
+
+## Step 4: Improve visualization
+RCy3::copyVisualStyle("default","wp.vis")
+RCy3::setNodeLabelMapping("label", style.name="wp.vis")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis")
+RCy3::setNodeShapeMapping('type', c('GeneProduct','Pathway','Drug'), c("ellipse","rectangle","hexagon"), style.name="wp.vis")
+RCy3::setNodeSizeMapping('type', c('GeneProduct','Pathway'), c(40,25), mapping.type = "d", style.name = "wp.vis")
+#RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+
+setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+
+
+RCy3::setVisualStyle("wp.vis")
+
+my.drugs <- selectNodes("drug", by.col = "CTL.Type", preserve = FALSE)$nodes 
+clearSelection()
+setNodeColorBypass(my.drugs, "#DD99FF")
+
+```
+
+
+> Interpretation
+
+- **Q3**: 
+- **Q4**: 
+
+***
+
+
+## Save session
+
+```{r session}
+cys.file <- file.path(getwd(), "output/workflow4.cys")
+saveSession(cys.file) 
+```
+
+## Clear environment
+
+```{r}
+rm(list=ls())
+```
