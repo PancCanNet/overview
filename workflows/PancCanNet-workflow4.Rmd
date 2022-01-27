@@ -42,7 +42,6 @@ library(RCy3)
 library(RColorBrewer)
 library(rstudioapi) 
 
-
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 ```
 
@@ -74,16 +73,17 @@ Please make sure you have Cytoscape opened before you run this code!
 ## Step 1: Open Pancreatic adenocarcinoma pathway as a network (WP4263)
 RCy3::commandsRun('wikipathways import-as-network id=WP4263') 
 toggleGraphicsDetails()
-
   
 ## Step 2: Visualize transcriptomics data on pathway 
 # load data 
 loadTableData(table = "node", data = data.panc, data.key.column = "GeneName", table.key.column = "name")
-# apply visual style 
-RCy3::copyVisualStyle("default","WikiPathways")
-RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "WikiPathways")
-RCy3::setVisualStyle("WikiPathways")
 
+# apply visual style 
+RCy3::copyVisualStyle("default","wp.vis1.a")
+RCy3::setNodeLabelMapping("name", style.name="wp.vis1.a")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis1.a")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis1.a",  colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC"))
+RCy3::setVisualStyle("wp.vis1.a")
 
 ## Step 3: Extend pathway with drug-target interaction information from DrugBank
 drugbank <- file.path(getwd(), "data/drugbank-5.1.7.xgmml")
@@ -94,34 +94,30 @@ commandsRun('cytargetlinker applyLayout network="current"')
 
 drug <- read.delim2("data/drugNodes-5.1.7.txt", stringsAsFactors=TRUE)
 loadTableData(drug, data.key.column="Identifier", table.key.column="name")
-loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "GeneId") #needed? 
 
 ## Step 4: Improve visualization
 
-# Visual style
-RCy3::copyVisualStyle("default","wp.vis")
-RCy3::setNodeLabelMapping("label", style.name="wp.vis")
-RCy3::lockNodeDimensions(TRUE, style.name="wp.vis")
-RCy3::setNodeShapeMapping('Type', c('GeneProduct','Pathway','Drug'), c("ellipse","rectangle","hexagon"), style.name="wp.vis")
-RCy3::setNodeSizeMapping('Type', c('GeneProduct','Pathway'), c(40,25), mapping.type = "d", style.name = "wp.vis")
-#RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+# node colors and shapes
+node.types = c("GeneProduct","Drug","Metabolite","Pathway","Group","Label") 
+node.colors <- c("#CCCCCC","#DD99FF","#F768A1","#99FF99","#89D0F5","#FFFFFF")
+node.shapes <- c("ellipse","hexagon","rectangle","rectangle","octagon","rectangle")
 
-setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+# apply visual style
+RCy3::copyVisualStyle("default","wp.vis1.b")
+RCy3::setNodeLabelMapping("name", style.name="wp.vis1.b")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis1.b")
+RCy3::setNodeShapeMapping('Type', node.types, node.shapes, style.name="wp.vis1.b")
+RCy3::setNodeSizeMapping('Type', c('GeneProduct'), c(45), mapping.type = "d", style.name = "wp.vis1.b")
+RCy3::setNodeColorMapping("Type", node.types, node.colors, mapping.type = 'd', default.color = "#CCCCCC", style.name = "wp.vis1.b")
+RCy3::setNodeBorderColorMapping("Type", c("Group","Label"), c("#000000","#000000"), mapping.type = 'd', default.color = "#CCCCCC", style.name = "wp.vis1.b")
+RCy3::setNodeBorderWidthMapping("Type", c("Group","Label"), c(5,5), mapping.type = 'd', style.name = "wp.vis1.b")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis1.b",  colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC00"))
+RCy3::setVisualStyle("wp.vis1.b")
 
-#data.values = c(-1,0,1) 
-#node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
-#setNodeColorMapping(c("B_logFC"), data.values, node.colors, default.color = "#99FF99", style.name = "wp.vis")
-
-RCy3::setVisualStyle("wp.vis")
-
-my.drugs <- selectNodes("Drug", by.col = "CTL.Type", preserve = FALSE)$nodes 
-clearSelection()
-setNodeColorBypass(my.drugs, "#DD99FF")
-
-log.nodes <- selectNodes(!NA, by.col = "B_logFC", preserve = FALSE)$nodes 
-clearSelection()
-setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
-
+# set drugs label 
+drug.labels <- getTableColumns(columns=c("SUID","label"))
+drug.labels <- na.omit(drug.labels)
+invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
 
@@ -146,12 +142,15 @@ installApp('stringApp')
 # network will be opened in Cytoscape (this might take a while) cutoff 0.9? 
 commandsRun(paste0('string disease query cutoff=0.9 disease=pancreatic cancer'))
 
-
 ## Step 2: Visualize transcriptomics data on pathway 
 # load data 
 loadTableData(table = "node", data = data.panc, data.key.column = "GeneName", table.key.column = "display name")
 # apply visual style 
-RCy3::setVisualStyle("WikiPathways")
+RCy3::copyVisualStyle("default","wp.vis2.a")
+RCy3::setNodeLabelMapping("display name", style.name="wp.vis2.a")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis2.a")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis2.a",  colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC"))
+RCy3::setVisualStyle("wp.vis2.a")
 
 
 ## Step 3: Extend pathway with drug-target interaction information from DrugBank
@@ -163,21 +162,20 @@ loadTableData(data.panc, data.key.column = "GeneId", table.key.column = "GeneId"
 
 
 ## Step 4: Improve visualization
-RCy3::copyVisualStyle("default","wp.vis")
-RCy3::setNodeLabelMapping("label", style.name="wp.vis")
-RCy3::lockNodeDimensions(TRUE, style.name="wp.vis")
-RCy3::setNodeShapeMapping('type', c('GeneProduct','Pathway','Drug'), c("ellipse","rectangle","hexagon"), style.name="wp.vis")
-RCy3::setNodeSizeMapping('type', c('GeneProduct','Pathway'), c(40,25), mapping.type = "d", style.name = "wp.vis")
-#RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
 
-setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis")
+# apply visual style
+RCy3::copyVisualStyle("default","wp.vis2.b")
+RCy3::setNodeLabelMapping("display name", style.name="wp.vis2.b")
+RCy3::lockNodeDimensions(TRUE, style.name="wp.vis2.b")
+RCy3::setNodeShapeMapping("CTL.Type", c("drug"), c("hexagon"), style.name="wp.vis2.b")
+RCy3::setNodeColorMapping("CTL.Type", c("drug"), c("#DD99FF"), mapping.type = 'd', default.color = "#CCCCCC", style.name = "wp.vis2.b")
+RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "wp.vis2.b",  colors = c("#CC3300","#FFFFFF","#6699FF","#CCCCCC00"))
+RCy3::setVisualStyle("wp.vis2.b")
 
-
-RCy3::setVisualStyle("wp.vis")
-
-my.drugs <- selectNodes("drug", by.col = "CTL.Type", preserve = FALSE)$nodes 
-clearSelection()
-setNodeColorBypass(my.drugs, "#DD99FF")
+# set drugs label 
+drug.labels <- getTableColumns(columns=c("SUID","label"))
+drug.labels <- na.omit(drug.labels)
+invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
 
