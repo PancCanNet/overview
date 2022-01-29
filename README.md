@@ -1,4 +1,3 @@
-Duygu added some text
 
 # PancCanNet Project
 <img src="logo.png" alt="logo" width="150" align="right"/>
