@@ -141,7 +141,6 @@ drug.labels <- na.omit(drug.labels)
 invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
-
 Drugs are visualized as purple hexagons. 
 
 
@@ -172,7 +171,6 @@ RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "
 RCy3::setVisualStyle("wp.vis2")
 
 ```
-
 You can now explore the gene expression changes in the PPI network. (blue = down-regulated, white = not changed, red = up-regulated).
 
 The following visual style is applied for the network. 
@@ -206,7 +204,6 @@ drug.labels <- na.omit(drug.labels)
 invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
-
 Drugs are visualized as purple hexagons. 
 
 ***
