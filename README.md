@@ -26,7 +26,7 @@ If you are interested in joining our intiative and contribute to the pathway col
 * [Analysis workflow 1](workflows/workflow1.md): Exploration of the PancCanNet pathway collection
 * [Analysis workflow 2](workflows/workflow2.md): Analysing a pancreatic cancer gene expression dataset
 * [Analysis workflow 3](workflows/workflow3.md): Analysing a pancreatic cancer immune panel dataset (PPI network + pathway information)
-* Analysis workflow 4: Drug-target identification
+* [Analysis workflow 4](worfklows/workflow4.md): Drug-target identification
 * [Analysis workflow 5](workflows/workflow5.md): Network diffusion to find affected pathways
 ---
 
