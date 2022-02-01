@@ -11,11 +11,7 @@ always_allow_html: true
 ---
 ## Introduction
 
-In this fourth workflow, we will visualize transcriptomics data on the Pancreatic adenocarcinoma pathway (WP4263) network. We will extend this network with drug-target interaction information from DrugBank and visualize the results. 
-
-We will then create a PPI network from String Disease query (“pancreatic cancer”) and visualize transcriptomics data. We will again extend the PPI network with drug-target interaction information from DrugBank and visualize the results.
-
-...
+In this workflow, we will visualize transcriptomics data on the Pancreatic adenocarcinoma pathway (WP4263) network. We will extend this network with drug-target interaction information from DrugBank and visualize the results. We will then build a protein-protein interaction network using String Disease query (“pancreatic cancer”) and visualize transcriptomics data. We will again extend the PPI network with drug-target interaction information from DrugBank and visualize the results.
 
 The PancCanNet project is a collaboration between the Erasmus MC, Maastricht University and Omnigen. The pathway portal is integrated in the collaborative pathway database WikiPathways (http://panccannet.wikipathways.org) and all analysis workflows are available on Github (https://panccannet.github.io). 
 
@@ -76,10 +72,7 @@ RCy3::cytoscapePing()
 
 ## Visualization of Pancreatic adenocarcinoma pathway (WP4263).
 
-Pancreatic ductal adenocarcinoma (PDA) is the most common malignancy of the pancreas. 
-
-Normal duct epithelium progresses to infiltrating cancer through a series of histologically defined precursors, Pancreatic Intraepithelial Neoplasia (PanINs: https://pathology.jhu.edu/pancreas/professionals/DuctLesions.php). The overexpression of HER-2/neu (ERBB2) and activating point mutations in the K-ras gene occur early, inactivation of the p16 gene (CDKN2A) at an intermediate stage, and the inactivation of p53, SMAD4, and BRCA2 occur relatively late. Activated K-ras engages multiple effector pathways. Although EGF receptors are conventionally regarded as upstream activators of RAS proteins, they can also act as RAS signal transducers via RAS-induced autocrine activation of the EGFR family ligands. Moreover, PDA shows extensive genomic instability and aneuploidy. Telomere attrition and mutations in p53 and BRCA2 are likely to contribute to these phenotypes. Inactivation of the SMAD4 tumor suppressor gene leads to loss of the inhibitory influence of the transforming growth factor-beta signaling pathway. The progression of disease and associated mutations is defined based on the arrow at the top, from left to right
-
+Pancreatic ductal adenocarcinoma (PDA) is the most common malignancy of the pancreas. We will load the Pancreatic adenocarcinoma pathway (WP4263) as a network and visualize transcriptomics data on it.
 
 ```{r}
 
@@ -121,6 +114,8 @@ The following visual style is applied for the network.
 
 ## Drug-target extension and visualization of Pancreatic adenocarcinoma pathway (WP4263).
 
+We then extend the Pancreatic adenocarcinoma pathway (WP4263) network with Drugbank information using CyTargetLinker and visualize it. 
+
 ```{r}
 ## Extend pathway with drug-target interaction information from DrugBank
 drugbank <- file.path(getwd(), "data/drugbank-5.1.7.xgmml")
@@ -146,19 +141,14 @@ drug.labels <- na.omit(drug.labels)
 invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
-
 Drugs are visualized as purple hexagons. 
 
-> Interpretation
-
-- **Q1**: 
-- **Q2**: 
 
 ***
 
 ## Visualization of PPI network from String Disease query (“pancreatic cancer”)
 
-Next, we will create and visualize a protein-protein interaction network from String Disease query "pancreatic cancer" using RCy3 and StringApp. 
+Next, we will create and visualize a protein-protein interaction (PPI) network from String Disease query "pancreatic cancer" using RCy3 and StringApp. 
 
 ```{r}
 ## PPI network from String Disease query (“pancreatic cancer”) using RCy3 + stringApp
@@ -181,19 +171,15 @@ RCy3::setNodeCustomHeatMapChart(c("B_logFC","C_logFC"), slot = 2, style.name = "
 RCy3::setVisualStyle("wp.vis2")
 
 ```
-
 You can now explore the gene expression changes in the PPI network. (blue = down-regulated, white = not changed, red = up-regulated).
 
 The following visual style is applied for the network. 
 - Protein: rectangle, fill color (blue = down-regulated, white = not changed, red = up-regulated, gray = no data).
 
 
-> Interpretation
-
-- **Q1**: Change the confidence cutoff in the commandsRun call from 0.9 (high confidence) to 0.4 (medium confidence). What changes?
-
-
 ## Drug-target extension and visualization of PPI network from String Disease query (“pancreatic cancer”)
+
+We extend the PPI network with Drugbank information using CyTargetLinker and visualize it. 
 
 ```{r}
 
@@ -218,7 +204,6 @@ drug.labels <- na.omit(drug.labels)
 invisible(mapply(function(x,y) setNodeLabelBypass(x,y), drug.labels$SUID, drug.labels$label))
 
 ```
-
 Drugs are visualized as purple hexagons. 
 
 ***
