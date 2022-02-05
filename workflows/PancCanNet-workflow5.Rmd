@@ -185,3 +185,19 @@ net <- RCy3::createNetworkFromIgraph(graph)
 RCy3::loadTableData(data.key.column = "node", data = ht, table = "node",table.key.column = "name")
 RCy3::setNodeColorMapping("heat", c(0,1), c("#FFFFFF","#FF0000"), default.color = "#FFFACD")
 ```
+
+## Save session
+
+```{r session}
+cys.file <- file.path(getwd(), "output/workflow5.cys")
+saveSession(cys.file) 
+
+# comment following line if you want to manipulate the visualization in Cytoscape
+RCy3::closeSession(save.before.closing = F)
+```
+
+## Clear environment
+
+```{r}
+rm(list=ls())
+```
