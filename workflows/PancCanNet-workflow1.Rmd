@@ -107,6 +107,11 @@ Lighter areas in the heatmap show pathways with similar gene content (high simil
 
 For the next step, please make sure that you have Cytoscape v3.8.0+ running. We want to explore the cross-talk between the pathway and see which central genes are present in many different pathways.
 
+```{r}
+RCy3::cytoscapePing()
+
+```
+
 ```{r collection network}
 # create pathway-gene network
 graph <- igraph::graph_from_edgelist(as.matrix(pwy.genes), directed = TRUE)
@@ -301,6 +306,9 @@ You can now explore the gene expression changes in the PancCanNet pathways. (blu
 ```{r session}
 cys.file <- file.path(getwd(), "output/workflow1.cys")
 saveSession(cys.file) 
+
+# comment following line if you want to manipulate the visualization in Cytoscape
+RCy3::closeSession(save.before.closing = F)
 ```
 
 ## Clear environment

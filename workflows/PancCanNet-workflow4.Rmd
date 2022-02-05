@@ -228,7 +228,10 @@ Drugs are visualized as purple hexagons.
 
 ```{r session}
 cys.file <- file.path(getwd(), "output/workflow4.cys")
-saveSession(cys.file) 
+saveSession(cys.file)
+
+# comment following line if you want to manipulate the visualization in Cytoscape
+RCy3::closeSession(save.before.closing = F)
 ```
 
 ## Clear environment

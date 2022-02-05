@@ -153,11 +153,10 @@ exportImage(png.file,'PNG', zoom = 500)
 
 ```{r}
 # Saving output
-
 cys.file <- file.path(getwd(), "output/workflow3.cys")
 saveSession(cys.file) 
 
-#comment following line if you want to manipulate the visualization in Cytoscape
+# comment following line if you want to manipulate the visualization in Cytoscape
 RCy3::closeSession(save.before.closing = F)
 ```
 
