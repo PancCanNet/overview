@@ -178,7 +178,7 @@ wpid2gene.2 <- wpid2gene[(wpid2gene$wpid %in% ht$node)|(wpid2gene$gene %in% ht$n
 graph <- graph_from_edgelist(as.matrix(wpid2gene.2),directed = FALSE)
 
 #check that cytoscape is connected
-cytoscapePing()
+RCy3::cytoscapePing()
 
 # create igraph if not yet available
 net <- RCy3::createNetworkFromIgraph(graph)

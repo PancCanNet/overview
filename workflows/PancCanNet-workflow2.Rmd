@@ -228,6 +228,11 @@ The genes not present in any pathway are included in the visualization but can b
 Please make sure you have Cytoscape opened before you run this code!
 
 ```{r}
+RCy3::cytoscapePing()
+
+```
+
+```{r}
 pwy <- unique(ewp.basal.res[,c(1,2)])
 colnames(pwy) <- c("id","label")
 pwy$type <- 'pathway'
